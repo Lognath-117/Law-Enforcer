@@ -39,7 +39,7 @@ def set_bg(png_file):
         unsafe_allow_html=True
     )
 
-set_bg("assets/bg.png")
+set_bg("bg.png")
 
 # -------------------- LOAD TRAINED MODEL --------------------
 with open(os.path.join("models", "tfidf_vectorizer.pkl"), "rb") as f:
@@ -153,3 +153,4 @@ if st.button("Submit"):
 
 st.markdown('<div class="footer">Project by Lognath</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
+
