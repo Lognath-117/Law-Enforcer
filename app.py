@@ -4,7 +4,6 @@ import pickle
 import re
 import nltk
 import base64
-import os
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -39,7 +38,7 @@ def set_background(png_file):
         unsafe_allow_html=True
     )
 
-set_background("bg.png")   # <-- YOUR PNG FILE
+set_background("bg.png")
 
 # -------------------- LOAD TRAINED MODEL FILES --------------------
 with open("tfidf_vectorizer.pkl", "rb") as f:
@@ -80,24 +79,16 @@ def predict_laws(crime_text):
         })
     return results
 
-# -------------------- CUSTOM CSS (UI MATCHES IMAGE) --------------------
+# -------------------- CUSTOM CSS --------------------
 st.markdown("""
 <style>
-.main-card {
-    max-width: 900px;
-    margin: auto;
-    background: rgba(0,0,0,0.65);
-    padding: 35px;
-    border-radius: 18px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.6);
-}
-
 .title {
     text-align: center;
     font-size: 42px;
     font-weight: bold;
     color: #f5d27a;
     text-shadow: 2px 2px 4px #000;
+    margin-top: 30px;
 }
 
 .subtitle {
@@ -108,24 +99,46 @@ st.markdown("""
 }
 
 .law-card {
-    background: rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.95);
     padding: 18px;
     border-radius: 12px;
     margin-bottom: 15px;
+    color: black;
 }
 
-.footer {
-    text-align: center;
-    color: #ddd;
-    margin-top: 30px;
-    font-size: 14px;
+.law-card h4,
+.law-card p,
+.law-card b {
+    color: black;
+}
+
+/* ===== RUNNING FOOTER ===== */
+.footer-container {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 35px;
+}
+
+.footer-text {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 18px;
+    color: #f5d27a;
+    animation: scroll-left 12s linear infinite;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 </style>
 """, unsafe_allow_html=True)
 
-# -------------------- UI LAYOUT --------------------
-st.markdown('<div class="main-card">', unsafe_allow_html=True)
-
+# -------------------- UI --------------------
 st.markdown('<div class="title">Indian Law Submitter</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">NLP-Based Legal Section Recommendation</div>', unsafe_allow_html=True)
 
@@ -152,5 +165,9 @@ if st.button("Submit"):
             </div>
             """, unsafe_allow_html=True)
 
-st.markdown('<div class="footer">Project by Lognath</div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+# -------------------- RUNNING FOOTER --------------------
+st.markdown("""
+<div class="footer-container">
+    <div class="footer-text">⚖️ Project by Lognath ⚖️</div>
+</div>
+""", unsafe_allow_html=True)
