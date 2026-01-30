@@ -21,8 +21,8 @@ st.set_page_config(
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-# -------------------- LOAD BACKGROUND IMAGE (PNG) --------------------
-def set_bg(png_file):
+# -------------------- BACKGROUND IMAGE (PNG) --------------------
+def set_background(png_file):
     with open(png_file, "rb") as f:
         encoded = base64.b64encode(f.read()).decode()
     st.markdown(
@@ -39,18 +39,18 @@ def set_bg(png_file):
         unsafe_allow_html=True
     )
 
-set_bg("bg.png")
+set_background("bg.png")   # <-- YOUR PNG FILE
 
-# -------------------- LOAD TRAINED MODEL --------------------
-with open(os.path.join("models", "tfidf_vectorizer.pkl"), "rb") as f:
+# -------------------- LOAD TRAINED MODEL FILES --------------------
+with open("tfidf_vectorizer.pkl", "rb") as f:
     vectorizer = pickle.load(f)
 
-with open(os.path.join("models", "law_vectors.pkl"), "rb") as f:
+with open("law_vectors.pkl", "rb") as f:
     law_vectors = pickle.load(f)
 
-df = pd.read_pickle(os.path.join("models", "ipc_dataframe.pkl"))
+df = pd.read_pickle("ipc_dataframe.pkl")
 
-# -------------------- PREPROCESSING --------------------
+# -------------------- TEXT PREPROCESSING --------------------
 def preprocess(text):
     text = str(text).lower()
     text = re.sub(r'[^a-z ]', '', text)
@@ -61,9 +61,10 @@ def preprocess(text):
 
     lemmatizer = WordNetLemmatizer()
     tokens = [lemmatizer.lemmatize(t) for t in tokens]
+
     return " ".join(tokens)
 
-# -------------------- PREDICTION --------------------
+# -------------------- PREDICTION FUNCTION --------------------
 def predict_laws(crime_text):
     processed = preprocess(crime_text)
     user_vector = vectorizer.transform([processed])
@@ -79,7 +80,7 @@ def predict_laws(crime_text):
         })
     return results
 
-# -------------------- CUSTOM CSS --------------------
+# -------------------- CUSTOM CSS (UI MATCHES IMAGE) --------------------
 st.markdown("""
 <style>
 .main-card {
@@ -122,7 +123,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# -------------------- UI --------------------
+# -------------------- UI LAYOUT --------------------
 st.markdown('<div class="main-card">', unsafe_allow_html=True)
 
 st.markdown('<div class="title">Indian Law Submitter</div>', unsafe_allow_html=True)
@@ -153,4 +154,3 @@ if st.button("Submit"):
 
 st.markdown('<div class="footer">Project by Lognath</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
-
