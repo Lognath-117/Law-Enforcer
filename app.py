@@ -8,6 +8,8 @@ import base64
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.metrics.pairwise import cosine_similarity
+from langdetect import detect
+from googletrans import Translator
 
 # -------------------- PAGE CONFIG --------------------
 st.set_page_config(
@@ -49,9 +51,21 @@ with open("law_vectors.pkl", "rb") as f:
 
 df = pd.read_pickle("ipc_dataframe.pkl")
 
+# -------------------- TRANSLATOR --------------------
+translator = Translator()
+
+def translate_to_english(text):
+    try:
+        lang = detect(text)
+        if lang != "en":
+            text = translator.translate(text, dest="en").text
+    except:
+        pass
+    return text
+
 # -------------------- TEXT PREPROCESSING --------------------
 def preprocess(text):
-    text = str(text).lower()
+    text = text.lower()
     text = re.sub(r'[^a-z ]', '', text)
 
     tokens = text.split()
@@ -65,8 +79,12 @@ def preprocess(text):
 
 # -------------------- PREDICTION FUNCTION --------------------
 def predict_laws(crime_text):
+    # Multilingual handling
+    crime_text = translate_to_english(crime_text)
+
     processed = preprocess(crime_text)
     user_vector = vectorizer.transform([processed])
+
     similarity = cosine_similarity(user_vector, law_vectors)[0]
     top_indices = similarity.argsort()[-3:][::-1]
 
@@ -78,7 +96,7 @@ def predict_laws(crime_text):
         })
     return results
 
-# -------------------- CUSTOM CSS (UPDATED) --------------------
+# -------------------- CUSTOM CSS --------------------
 st.markdown("""
 <style>
 .title {
@@ -97,7 +115,6 @@ st.markdown("""
     margin-bottom: 25px;
 }
 
-/* Output cards with 25% opacity */
 .law-card {
     background: rgba(255,255,255,0.25);
     padding: 18px;
@@ -135,11 +152,11 @@ st.markdown("""
 
 # -------------------- UI --------------------
 st.markdown('<div class="title">Indian Law Submitter</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">NLP-Based Legal Section Recommendation</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Multilingual NLP-Based Legal Section Recommendation</div>', unsafe_allow_html=True)
 
 crime_text = st.text_area(
-    "Enter Crime Description:",
-    placeholder='e.g., "Someone fraudulently took money promising a job and never returned it."',
+    "Enter Crime Description (Any Language):",
+    placeholder="English / தமிழ் / हिंदी",
     height=150
 )
 
