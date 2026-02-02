@@ -74,12 +74,11 @@ def predict_laws(crime_text):
     for idx in top_indices:
         results.append({
             "section": df.iloc[idx]['Section'],
-            "description": df.iloc[idx]['Description'],
-            "score": round(similarity[idx], 2)
+            "description": df.iloc[idx]['Description']
         })
     return results
 
-# -------------------- CUSTOM CSS --------------------
+# -------------------- CUSTOM CSS (UPDATED) --------------------
 st.markdown("""
 <style>
 .title {
@@ -98,8 +97,9 @@ st.markdown("""
     margin-bottom: 25px;
 }
 
+/* Output cards with 25% opacity */
 .law-card {
-    background: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.25);
     padding: 18px;
     border-radius: 12px;
     margin-bottom: 15px;
@@ -107,12 +107,11 @@ st.markdown("""
 }
 
 .law-card h4,
-.law-card p,
-.law-card b {
+.law-card p {
     color: black;
 }
 
-/* ===== RUNNING FOOTER ===== */
+/* Running footer */
 .footer-container {
     width: 100%;
     overflow: hidden;
@@ -128,12 +127,8 @@ st.markdown("""
 }
 
 @keyframes scroll-left {
-    0% {
-        transform: translateX(100%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -161,14 +156,12 @@ if st.button("Submit"):
             <div class="law-card">
                 <h4>{law['section']}</h4>
                 <p>{law['description']}</p>
-                <b>Confidence Score:</b> {law['score']}
             </div>
             """, unsafe_allow_html=True)
 
 # -------------------- RUNNING FOOTER --------------------
 st.markdown("""
 <div class="footer-container">
-    <div class="footer-text">⚖️ Project by Lognath ,Godwin Samraj⚖️</div>
+    <div class="footer-text">⚖️ Project by Lognath ⚖️</div>
 </div>
 """, unsafe_allow_html=True)
-
