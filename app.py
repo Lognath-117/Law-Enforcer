@@ -168,6 +168,7 @@ if st.button("Submit"):
 # -------------------- RUNNING FOOTER --------------------
 st.markdown("""
 <div class="footer-container">
-    <div class="footer-text">⚖️ Project by Lognath ⚖️</div>
+    <div class="footer-text">⚖️ Project by Lognath ,Godwin Samraj⚖️</div>
 </div>
 """, unsafe_allow_html=True)
+
